@@ -3,10 +3,13 @@
 <table>
   <tr>Score</tr>
   <tr>
-    <td>Player x: {{xScore}}</td>
-    <td>Player o: {{oScore}}</td>
+    {{#each model as |player|}}
+      <td>Player {{player.name}}: {{player.score}}</td>
+    {{/each}}
   </tr>
 </table>
+<button {{action 'clearScores'}}>clear score</button>
+<br>
 <br>
 <table class='table'>
   <tr>

@@ -45,30 +45,41 @@ export default Ember.Controller.extend({
   ],
   xBoxes: [],
   oBoxes: [],
-  xScore: 0,
-  oScore: 0,
 
   actions: {
     markBox(symbol, box, number){
       if (get(this, box)) { return }
-      let currentPlayer = symbol === 'x' ? 'x' : 'o'
-      let otherPlayer = symbol === 'x' ? '0' : 'x'
-      let currentPlayerBoxes = get(this, eval('currentPlayer+"Boxes"'))
+      let currentPlay = symbol === 'x' ? 'x' : 'o'
+      let otherPlay = symbol === 'x' ? 'o' : 'x'
+      let currentPlayBoxes = get(this, eval('currentPlay+"Boxes"'))
       let winCombos = get(this, 'winCombos');
 
       set(this, box, symbol);
-      currentPlayerBoxes.pushObject(number);
-      let won = checkWinning(winCombos, currentPlayerBoxes);
+      currentPlayBoxes.pushObject(number);
+      let won = checkWinning(winCombos, currentPlayBoxes);
       if (won) {
-        alert(currentPlayer + ' won')
-        this.reset()
+        this.winActions(currentPlay)
       } else if (isDraw(get(this, 'xBoxes'), get(this, 'oBoxes'))) {
         alert('Game is a draw')
         this.reset()
       } else {
-        set(this, 'symbol', otherPlayer);
+        set(this, 'symbol', otherPlay);
       }
+    },
+    clearScores(){
+      let model = this.model
+      model.map(record => {
+        record.set('score', 0)
+        record.save()
+      });
     }
+  },
+  winActions(winner){
+    alert(winner + ' won')
+    let record = this.get('model').findBy('name', winner)
+    record.incrementProperty('score')
+    record.save()
+    this.reset()
   },
   reset() {
     set(this, 'xBoxes', Ember.A());

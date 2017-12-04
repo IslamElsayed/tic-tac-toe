@@ -2,12 +2,11 @@ import Ember from 'ember';
 const { get, set } = Ember;
 
 function checkWinning(combo, symbol) {
-  for (let i=0; i<combo.length; i++) {
-    //loop through each array winning combo
+  for (let i = 0; i < combo.length; i++) {
     let count = 0;
-    for (let j=0; j<symbol.length; j++) {
+    for (let j = 0; j < symbol.length; j++) {
       if (combo[i].includes(symbol[j])) {
-        count +=1;
+        count ++;
       }
     }
 
@@ -16,6 +15,10 @@ function checkWinning(combo, symbol) {
     }
   }
   return false;
+}
+
+function isDraw(xBoxes, oBoxes){
+  return ((xBoxes.length + oBoxes.length) === 9)
 }
 
 export default Ember.Controller.extend({
@@ -30,7 +33,7 @@ export default Ember.Controller.extend({
   eight: null,
   nine: null,
 
-  winCombo: [
+  winCombos: [
     [1, 4, 7],
     [2, 5, 8],
     [3, 6, 9],
@@ -51,20 +54,22 @@ export default Ember.Controller.extend({
       let currentPlayer = symbol === 'x' ? 'x' : 'o'
       let otherPlayer = symbol === 'x' ? '0' : 'x'
       let currentPlayerBoxes = get(this, eval('currentPlayer+"Boxes"'))
-      let winCombo = get(this, 'winCombo');
+      let winCombos = get(this, 'winCombos');
 
       set(this, box, symbol);
       currentPlayerBoxes.pushObject(number);
-      let won = checkWinning(winCombo, currentPlayerBoxes);
+      let won = checkWinning(winCombos, currentPlayerBoxes);
       if (won) {
         alert(currentPlayer + ' won')
         this.reset()
-      } else if (this.draw()) {
+      } else if (isDraw(get(this, 'xBoxes'), get(this, 'oBoxes'))) {
+        alert('Game is a draw')
+        this.reset()
+      } else {
         set(this, 'symbol', otherPlayer);
       }
     }
   },
-
   reset() {
     set(this, 'xBoxes', Ember.A());
     set(this, 'oBoxes', Ember.A());

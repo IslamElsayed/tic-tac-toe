@@ -1,5 +1,30 @@
-{{!-- The following component displays Ember's default welcome message. --}}
-{{welcome-page}}
-{{!-- Feel free to remove this! --}}
+<h1>Tic Tac Toe</h1>
 
-{{outlet}}
+<table>
+  <tr>Score</tr>
+  <tr>
+    {{#each model as |player|}}
+      <td>Player {{player.name}}: {{player.score}}</td>
+    {{/each}}
+  </tr>
+</table>
+<button {{action 'clearScores'}}>clear score</button>
+<br>
+<br>
+<table class='table'>
+  <tr>
+    <td {{action 'markBox' symbol 'one' 1}}>{{one}}</td>
+    <td {{action 'markBox' symbol 'two' 2}}>{{two}}</td>
+    <td {{action 'markBox' symbol 'three' 3}}>{{three}}</td>
+  </tr>
+  <tr>
+    <td {{action 'markBox' symbol 'four' 4}}>{{four}}</td>
+    <td {{action 'markBox' symbol 'five' 5}}>{{five}}</td>
+    <td {{action 'markBox' symbol 'six' 6}}>{{six}}</td>
+  </tr>
+  <tr>
+    <td {{action 'markBox' symbol 'seven' 7}}>{{seven}}</td>
+    <td {{action 'markBox' symbol 'eight' 8}}>{{eight}}</td>
+    <td {{action 'markBox' symbol 'nine' 9}}>{{nine}}</td>
+  </tr>
+</table>
